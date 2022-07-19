@@ -37,6 +37,8 @@ dependencies:
   rounded_loading_button: ^2.1.0
   http: ^0.13.4
   file_picker: ^4.6.1
+  shared_preferences: ^2.0.15
+  provider: ^6.0.3
 
 dev_dependencies:
   flutter_test:

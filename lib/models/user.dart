@@ -5,7 +5,9 @@ class User {
   final String id;
   final String username;
   final String email;
-  String? firstname;
+  final String token;
+  final String password;
+  String? firstName;
   String? lastName;
   String? avatar;
 
@@ -13,7 +15,9 @@ class User {
     required this.id,
     required this.username,
     required this.email,
-    this.firstname,
+    required this.token,
+    required this.password,
+    this.firstName,
     this.lastName,
     this.avatar,
   });
@@ -23,7 +27,9 @@ class User {
       'id': id,
       'username': username,
       'email': email,
-      'firstname': firstname,
+      'token': token,
+      'password': password,
+      'firstName': firstName,
       'lastName': lastName,
       'avatar': avatar,
     };
@@ -31,10 +37,12 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id'] as String,
+      id: map['_id'] as String,
       username: map['username'] as String,
       email: map['email'] as String,
-      firstname: map['firstname'] != null ? map['firstname'] as String : null,
+      token: map['token'] as String,
+      password: map['password'] as String,
+      firstName: map['firstName'] != null ? map['firstName'] as String : null,
       lastName: map['lastName'] != null ? map['lastName'] as String : null,
       avatar: map['avatar'] != null ? map['avatar'] as String : null,
     );
@@ -49,7 +57,9 @@ class User {
     String? id,
     String? username,
     String? email,
-    String? firstname,
+    String? token,
+    String? password,
+    String? firstName,
     String? lastName,
     String? avatar,
   }) {
@@ -57,7 +67,9 @@ class User {
       id: id ?? this.id,
       username: username ?? this.username,
       email: email ?? this.email,
-      firstname: firstname ?? this.firstname,
+      token: token ?? this.token,
+      password: password ?? this.password,
+      firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       avatar: avatar ?? this.avatar,
     );
