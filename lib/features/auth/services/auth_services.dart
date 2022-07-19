@@ -27,11 +27,6 @@ class AuthServices {
           "email": email,
         }),
       );
-      if (res.statusCode == 200) {
-        onSuccess();
-      } else {
-        onError();
-      }
       httpErrorHandle(
         response: res,
         context: context,
@@ -41,6 +36,7 @@ class AuthServices {
             "Account created successfully!\nLogin with these credentials",
           );
         },
+        onError: onError,
       );
     } catch (e) {
       onError();
@@ -68,15 +64,11 @@ class AuthServices {
           },
         ),
       );
-      if (res.statusCode == 200) {
-        onSuccess();
-      } else {
-        onError();
-      }
       httpErrorHandle(
         response: res,
         context: context,
         onSuccess: () {},
+        onError: onError,
       );
     } catch (e) {
       onError();
