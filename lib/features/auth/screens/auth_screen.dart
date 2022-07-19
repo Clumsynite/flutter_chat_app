@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_app/common/widgets/custom_button.dart';
 import 'package:flutter_chat_app/common/widgets/custom_input.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/features/auth/services/auth_services.dart';
