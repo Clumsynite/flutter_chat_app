@@ -72,4 +72,38 @@ class FriendRequestServices {
     }
     return friendRequests;
   }
+
+  Future<void> acceptFriendRequest({
+    required BuildContext context,
+    required String id,
+    required VoidCallback onSuccess,
+  }) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString(tokenKey);
+
+      http.Response res = await http.post(
+        Uri.parse('$uri/friend-request/accept'),
+        headers: <String, String>{
+          'Content-type': "application/json; charset=UTF-8",
+          tokenKey: token!
+        },
+        body: jsonEncode(
+          {
+            '_id': id,
+          },
+        ),
+      );
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          onSuccess();
+          showSnackBar(context, "Friend Request Accepted!");
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
 }

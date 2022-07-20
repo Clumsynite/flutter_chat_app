@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/widgets/loader.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
+import 'package:flutter_chat_app/constants/utils.dart';
 import 'package:flutter_chat_app/features/friend/service/friend_request_services.dart';
 import 'package:flutter_chat_app/models/friend_request.dart';
 
@@ -16,6 +17,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
   final FriendRequestServices friendRequestServices = FriendRequestServices();
   List<FriendRequest> friendRequests = [];
   bool isLoading = false;
+  List<String> handlingRequests = [];
 
   @override
   void initState() {
@@ -32,6 +34,31 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  void acceptFriendRequest(String id) async {
+    if (handlingRequests.contains(id)) {
+      int index = friendRequests.indexWhere(
+        (element) => element.id == id,
+      );
+      FriendRequest friendRequest = friendRequests[index];
+      return showSnackBar(context,
+          '${friendRequest.contact.username}\'s request is already being processed');
+    }
+    handlingRequests.add(id);
+    setState(() {});
+    await friendRequestServices.acceptFriendRequest(
+      context: context,
+      id: id,
+      onSuccess: () {
+        friendRequests.removeWhere(
+          (FriendRequest friendRequest) => friendRequest.id == id,
+        );
+        setState(() {});
+      },
+    );
+    handlingRequests.removeWhere((element) => element == id);
+    setState(() {});
   }
 
   @override
@@ -120,7 +147,8 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
                                   ),
                                   // const SizedBox(width: 5),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () =>
+                                        acceptFriendRequest(friendRequest.id),
                                     icon: const Icon(
                                       Icons.check_circle_outlined,
                                       size: 30,
