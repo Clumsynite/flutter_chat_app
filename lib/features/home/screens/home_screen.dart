@@ -29,7 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
+  void fetchFriendRequestCount() async {
+    friendRequestCount =
+        await friendRequestServices.getFriendRequestCount(context: context);
+    setState(() {});
+  }
+
   void updatePage(int page) {
+    fetchFriendRequestCount();
     setState(() {
       _currentPage = page;
     });
@@ -47,12 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void navigateToFriendRequestScreen() {
     Navigator.pushNamed(context, FriendRequestsScreen.routeName);
-  }
-
-  void fetchFriendRequestCount() async {
-    friendRequestCount =
-        await friendRequestServices.getFriendRequestCount(context: context);
-    setState(() {});
   }
 
   @override
