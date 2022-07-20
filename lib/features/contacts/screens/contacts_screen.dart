@@ -58,6 +58,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
     );
   }
 
+  void removeFriend(String id) {
+    contactsServices.removeFriend(
+      context: context,
+      id: id,
+      onSuccess: () {},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -157,7 +165,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                     ),
                                   ],
                                 ),
-                                onTap: () {},
+                                onTap: () => removeFriend(contact.id),
                               ),
                           ],
                         ),

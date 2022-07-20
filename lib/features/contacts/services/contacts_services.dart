@@ -93,4 +93,33 @@ class ContactsServices {
       showSnackBar(context, e.toString());
     }
   }
+
+  void removeFriend({
+    required BuildContext context,
+    required String id,
+    required VoidCallback onSuccess,
+  }) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString(tokenKey);
+
+      http.Response res = await http.delete(
+        Uri.parse('$uri/friend/$id'),
+        headers: <String, String>{
+          'Content-type': "application/json; charset=UTF-8",
+          tokenKey: token!
+        },
+      );
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          onSuccess();
+          showSnackBar(context, "Friend Removed from List!");
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
 }
