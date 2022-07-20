@@ -5,6 +5,7 @@ import 'package:flutter_chat_app/config/env.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/constants/error_handling.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
+import 'package:flutter_chat_app/features/home/screens/home_screen.dart';
 import 'package:flutter_chat_app/models/user.dart';
 import 'package:flutter_chat_app/provider/user_provider.dart';
 import 'package:http/http.dart' as http;
@@ -76,6 +77,11 @@ class AuthServices {
           Provider.of<UserProvider>(context, listen: false).setUser(res.body);
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString(tokenKey, jsonDecode(res.body)['token']);
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            HomeScreen.routeName,
+            (route) => false,
+          );
           onSuccess();
         },
         onError: onError,

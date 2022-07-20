@@ -1,9 +1,10 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_app/config/env.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/features/contacts/screens/contacts_screen.dart';
+import 'package:flutter_chat_app/features/friend/screens/friend_requests_screen.dart';
+import 'package:flutter_chat_app/features/friend/service/friend_request_services.dart';
 import 'package:flutter_chat_app/features/home/services/home_services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = "/home";
@@ -14,7 +15,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FriendRequestServices friendRequestServices = FriendRequestServices();
   int _currentPage = 1;
+  int friendRequestCount = 0;
 
   final List<Widget> _pages = const [
     Center(
@@ -35,10 +38,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    fetchFriendRequestCount();
   }
 
   void onLogout() {
     HomeServices().logout(context: context);
+  }
+
+  void navigateToFriendRequestScreen() {
+    Navigator.pushNamed(context, FriendRequestsScreen.routeName);
+  }
+
+  void fetchFriendRequestCount() async {
+    friendRequestCount =
+        await friendRequestServices.getFriendRequestCount(context: context);
+    setState(() {});
   }
 
   @override
@@ -59,9 +73,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           actions: [
+            IconButton(
+              onPressed: navigateToFriendRequestScreen,
+              icon: Badge(
+                showBadge: friendRequestCount > 0,
+                badgeContent: Text(
+                  friendRequestCount.toString(),
+                ),
+                child: const Icon(
+                  Icons.group_add_outlined,
+                ),
+              ),
+            ),
             PopupMenuButton(
               itemBuilder: (context) => [
                 PopupMenuItem(
+                  onTap: onLogout,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
@@ -75,7 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  onTap: onLogout,
                 ),
               ],
             )
