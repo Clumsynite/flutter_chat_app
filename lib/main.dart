@@ -47,7 +47,7 @@ class FlutterChatApp extends StatefulWidget {
 
 class _FlutterChatAppState extends State<FlutterChatApp> {
   final AuthServices authServices = AuthServices();
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -56,7 +56,13 @@ class _FlutterChatAppState extends State<FlutterChatApp> {
   }
 
   void checkIfLoggedIn() async {
-    authServices.getUser(context: context);
+    setState(() {
+      isLoading = true;
+    });
+    await authServices.getUser(context: context);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
