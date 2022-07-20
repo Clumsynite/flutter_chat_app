@@ -8,6 +8,10 @@ class UserProvider extends ChangeNotifier {
     email: "",
     token: "",
     password: "",
+    friends: [""],
+    isOnline: false,
+    createdAt: "",
+    updatedAt: "",
   );
 
   User get user => _user;

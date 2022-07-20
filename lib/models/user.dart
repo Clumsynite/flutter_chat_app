@@ -10,6 +10,11 @@ class User {
   String? firstName;
   String? lastName;
   String? avatar;
+  final List<String> friends;
+  final bool isOnline;
+  String? lastSeen;
+  final String createdAt;
+  final String updatedAt;
 
   User({
     required this.id,
@@ -20,6 +25,11 @@ class User {
     this.firstName,
     this.lastName,
     this.avatar,
+    required this.friends,
+    required this.isOnline,
+    this.lastSeen,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   Map<String, dynamic> toMap() {
@@ -32,6 +42,11 @@ class User {
       'firstName': firstName,
       'lastName': lastName,
       'avatar': avatar,
+      'friends': friends,
+      'isOnline': isOnline,
+      'lastSeen': lastSeen,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 
@@ -45,6 +60,11 @@ class User {
       firstName: map['firstName'] != null ? map['firstName'] as String : null,
       lastName: map['lastName'] != null ? map['lastName'] as String : null,
       avatar: map['avatar'] != null ? map['avatar'] as String : null,
+      friends: List<String>.from((map['friends'])),
+      isOnline: map['isOnline'] as bool,
+      lastSeen: map['lastSeen'] != null ? map['lastSeen'] as String : null,
+      createdAt: map['createdAt'] as String,
+      updatedAt: map['updatedAt'] as String,
     );
   }
 
@@ -62,6 +82,11 @@ class User {
     String? firstName,
     String? lastName,
     String? avatar,
+    List<String>? friends,
+    bool? isOnline,
+    String? lastSeen,
+    String? createdAt,
+    String? updatedAt,
   }) {
     return User(
       id: id ?? this.id,
@@ -72,6 +97,11 @@ class User {
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       avatar: avatar ?? this.avatar,
+      friends: friends ?? this.friends,
+      isOnline: isOnline ?? this.isOnline,
+      lastSeen: lastSeen ?? this.lastSeen,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }
