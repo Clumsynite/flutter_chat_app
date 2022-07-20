@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/features/contacts/screens/contacts_screen.dart';
 import 'package:flutter_chat_app/features/friend_requests/screens/friend_requests_screen.dart';
-import 'package:flutter_chat_app/features/friend_requests/service/friend_request_services.dart';
 import 'package:flutter_chat_app/features/home/services/home_services.dart';
+import 'package:flutter_chat_app/features/mesaging/screens/friends_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = "/home";
@@ -15,14 +15,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FriendRequestServices friendRequestServices = FriendRequestServices();
-  int _currentPage = 1;
+  final HomeServices homeServices = HomeServices();
+  int _currentPage = 0;
   int friendRequestCount = 0;
 
   final List<Widget> _pages = const [
-    Center(
-      child: Text("Home"),
-    ),
+    FriendsScreen(),
     ContactsScreen(),
     Center(
       child: Text("Tab 3"),
@@ -31,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void fetchFriendRequestCount() async {
     friendRequestCount =
-        await friendRequestServices.getFriendRequestCount(context: context);
+        await homeServices.getFriendRequestCount(context: context);
     setState(() {});
   }
 
