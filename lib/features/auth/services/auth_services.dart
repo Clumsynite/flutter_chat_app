@@ -1,12 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_chat_app/config/env.dart';
-import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/constants/error_handling.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
 import 'package:flutter_chat_app/features/home/screens/home_screen.dart';
-import 'package:flutter_chat_app/models/user.dart';
 import 'package:flutter_chat_app/provider/user_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';

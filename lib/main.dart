@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/widgets/loader.dart';
-import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/features/auth/screens/auth_screen.dart';
 import 'package:flutter_chat_app/features/auth/services/auth_services.dart';
 import 'package:flutter_chat_app/features/home/screens/home_screen.dart';

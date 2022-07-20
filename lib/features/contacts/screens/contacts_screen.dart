@@ -3,7 +3,6 @@ import 'package:flutter_chat_app/common/widgets/loader.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/features/contacts/services/contacts_services.dart';
 import 'package:flutter_chat_app/models/contact.dart';
-import 'package:flutter_chat_app/models/user.dart';
 
 class ContactsScreen extends StatefulWidget {
   const ContactsScreen({Key? key}) : super(key: key);
@@ -81,7 +80,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                     itemBuilder: (context, index) {
                       Contact contact = contacts[index];
                       return ListTile(
-                        leading: Container(
+                        leading: SizedBox(
                           height: double.infinity,
                           child: CircleAvatar(
                             backgroundColor: GlobalConfig().randomColour,

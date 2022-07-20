@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_chat_app/features/auth/screens/auth_screen.dart';
 import 'package:flutter_chat_app/features/friend/screens/friend_requests_screen.dart';
 import 'package:flutter_chat_app/features/home/screens/home_screen.dart';
