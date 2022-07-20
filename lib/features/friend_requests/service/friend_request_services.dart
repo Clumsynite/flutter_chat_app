@@ -9,33 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FriendRequestServices {
-  Future<int> getFriendRequestCount({
-    required BuildContext context,
-  }) async {
-    int friendRequestCount = 0;
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString(tokenKey);
-      http.Response res = await http.get(
-        Uri.parse('$uri/friend-request/count'),
-        headers: <String, String>{
-          'Content-type': 'application/json; Character-type=UTF-8',
-          tokenKey: token!
-        },
-      );
-      httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () {
-          friendRequestCount = jsonDecode(res.body);
-        },
-      );
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
-    return friendRequestCount;
-  }
-
   Future<List<FriendRequest>> getReceviedFriendRequests({
     required BuildContext context,
   }) async {
