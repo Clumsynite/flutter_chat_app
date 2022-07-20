@@ -10,6 +10,7 @@ class Contact {
   String? firstName;
   String? lastName;
   String? avatar;
+  String? isRequested; // friend request sent this contact?
 
   Contact({
     required this.id,
@@ -20,6 +21,7 @@ class Contact {
     this.firstName,
     this.lastName,
     this.avatar,
+    this.isRequested,
   });
 
   Map<String, dynamic> toMap() {
@@ -32,12 +34,13 @@ class Contact {
       'firstName': firstName,
       'lastName': lastName,
       'avatar': avatar,
+      'isRequested': isRequested,
     };
   }
 
   factory Contact.fromMap(Map<String, dynamic> map) {
     return Contact(
-      id: map['_id'] as String,
+      id: map['id'] as String,
       username: map['username'] as String,
       email: map['email'] as String,
       isFriend: map['isFriend'] as bool,
@@ -45,6 +48,8 @@ class Contact {
       firstName: map['firstName'] != null ? map['firstName'] as String : null,
       lastName: map['lastName'] != null ? map['lastName'] as String : null,
       avatar: map['avatar'] != null ? map['avatar'] as String : null,
+      isRequested:
+          map['isRequested'] != null ? map['isRequested'] as String : null,
     );
   }
 
@@ -62,6 +67,7 @@ class Contact {
     String? firstName,
     String? lastName,
     String? avatar,
+    String? isRequested,
   }) {
     return Contact(
       id: id ?? this.id,
@@ -72,6 +78,7 @@ class Contact {
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       avatar: avatar ?? this.avatar,
+      isRequested: isRequested ?? this.isRequested,
     );
   }
 }
