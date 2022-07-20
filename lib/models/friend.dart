@@ -40,7 +40,7 @@ class Friend {
 
   factory Friend.fromMap(Map<String, dynamic> map) {
     return Friend(
-      id: map['id'] as String,
+      id: map['_id'] as String,
       username: map['username'] as String,
       email: map['email'] as String,
       firstName: map['firstName'] != null ? map['firstName'] as String : null,

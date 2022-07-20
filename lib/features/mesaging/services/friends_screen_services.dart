@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class FriendsScreenServices {
-  Future<List<Friend>> getAllUsers({
+  Future<List<Friend>> getAllFriends({
     required BuildContext context,
   }) async {
     List<Friend> friends = [];
@@ -16,7 +16,7 @@ class FriendsScreenServices {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString(tokenKey);
       http.Response res = await http.get(
-        Uri.parse('$uri/user/all'),
+        Uri.parse('$uri/friend/'),
         headers: <String, String>{
           'Content-type': "application/json; charset=UTF-8",
           tokenKey: token!
