@@ -106,4 +106,38 @@ class FriendRequestServices {
       showSnackBar(context, e.toString());
     }
   }
+
+  Future<void> cancelFriendRequest({
+    required BuildContext context,
+    required String id,
+    required VoidCallback onSuccess,
+  }) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString(tokenKey);
+
+      http.Response res = await http.post(
+        Uri.parse('$uri/friend-request/cancel'),
+        headers: <String, String>{
+          'Content-type': "application/json; charset=UTF-8",
+          tokenKey: token!
+        },
+        body: jsonEncode(
+          {
+            '_id': id,
+          },
+        ),
+      );
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          onSuccess();
+          showSnackBar(context, "Friend Request Cancelled!");
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
 }

@@ -61,6 +61,31 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
     setState(() {});
   }
 
+  void cancelFriendRequest(String id) async {
+    if (handlingRequests.contains(id)) {
+      int index = friendRequests.indexWhere(
+        (element) => element.id == id,
+      );
+      FriendRequest friendRequest = friendRequests[index];
+      return showSnackBar(context,
+          '${friendRequest.contact.username}\'s request is already being processed');
+    }
+    handlingRequests.add(id);
+    setState(() {});
+    await friendRequestServices.cancelFriendRequest(
+      context: context,
+      id: id,
+      onSuccess: () {
+        friendRequests.removeWhere(
+          (FriendRequest friendRequest) => friendRequest.id == id,
+        );
+        setState(() {});
+      },
+    );
+    handlingRequests.removeWhere((element) => element == id);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,91 +107,102 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
       ),
       body: isLoading
           ? const Loader()
-          : Container(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      "Friend Requests from:",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+          : friendRequests.isEmpty
+              ? const Center(
+                  child: Text(
+                    "No New Friend Requests",
+                    style: TextStyle(
+                      fontSize: 20,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: friendRequests.length,
-                      itemBuilder: (context, index) {
-                        FriendRequest friendRequest = friendRequests[index];
-                        return ListTile(
-                          leading: SizedBox(
-                            height: double.infinity,
-                            child: CircleAvatar(
-                              backgroundColor: GlobalConfig().randomColour,
-                              child: Text(
-                                friendRequest.contact.username[0].toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
+                )
+              : Container(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          "Friend Requests from:",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: friendRequests.length,
+                          itemBuilder: (context, index) {
+                            FriendRequest friendRequest = friendRequests[index];
+                            return ListTile(
+                              leading: SizedBox(
+                                height: double.infinity,
+                                child: CircleAvatar(
+                                  backgroundColor: GlobalConfig().randomColour,
+                                  child: Text(
+                                    friendRequest.contact.username[0]
+                                        .toUpperCase(),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          title: Text(
-                            friendRequest.contact.username,
-                            style: const TextStyle(
-                              fontSize: 18,
-                            ),
-                          ),
-                          subtitle: Text(
-                            friendRequest.contact.email,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          trailing: SizedBox(
-                            width: 90,
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.cancel_outlined,
-                                      size: 30,
-                                      color: Colors.red,
-                                    ),
-                                    tooltip: "Cancel Request",
-                                  ),
-                                  // const SizedBox(width: 5),
-                                  IconButton(
-                                    onPressed: () =>
-                                        acceptFriendRequest(friendRequest.id),
-                                    icon: const Icon(
-                                      Icons.check_circle_outlined,
-                                      size: 30,
-                                      color: Colors.green,
-                                    ),
-                                    tooltip: "Accept Request",
-                                  ),
-                                ],
+                              title: Text(
+                                friendRequest.contact.username,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                              subtitle: Text(
+                                friendRequest.contact.email,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              trailing: SizedBox(
+                                width: 90,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () => cancelFriendRequest(
+                                            friendRequest.id),
+                                        icon: const Icon(
+                                          Icons.cancel_outlined,
+                                          size: 30,
+                                          color: Colors.red,
+                                        ),
+                                        tooltip: "Cancel Request",
+                                      ),
+                                      // const SizedBox(width: 5),
+                                      IconButton(
+                                        onPressed: () => acceptFriendRequest(
+                                            friendRequest.id),
+                                        icon: const Icon(
+                                          Icons.check_circle_outlined,
+                                          size: 30,
+                                          color: Colors.green,
+                                        ),
+                                        tooltip: "Accept Request",
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
     );
   }
 }
