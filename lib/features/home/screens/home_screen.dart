@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/config/env.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/features/contacts/screens/contacts_screen.dart';
+import 'package:flutter_chat_app/features/home/services/home_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,6 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  void onLogout() {
+    HomeServices().logout(context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +58,28 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.black,
             ),
           ),
+          actions: [
+            PopupMenuButton(
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Icon(
+                        Icons.logout,
+                        color: Colors.black,
+                        size: 16,
+                      ),
+                      Text(
+                        "Logout",
+                      ),
+                    ],
+                  ),
+                  onTap: onLogout,
+                ),
+              ],
+            )
+          ],
         ),
       ),
       body: _pages[_currentPage],
