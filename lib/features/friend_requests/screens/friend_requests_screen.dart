@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/common/widgets/empty_screen.dart';
 import 'package:flutter_chat_app/common/widgets/loader.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
@@ -108,14 +109,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
       body: isLoading
           ? const Loader()
           : friendRequests.isEmpty
-              ? const Center(
-                  child: Text(
-                    "No New Friend Requests",
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                )
+              ? const EmptyScreen(text: "No New Friend Requests")
               : Container(
                   padding: const EdgeInsets.all(8),
                   child: Column(
