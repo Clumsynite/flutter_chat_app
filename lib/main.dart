@@ -81,7 +81,7 @@ class _FlutterChatAppState extends State<FlutterChatApp> {
                 elevation: 0,
                 iconTheme: IconThemeData(color: Colors.black),
               ),
-              useMaterial3: true,
+              // useMaterial3: true, // changes UI in all places
             ),
             onGenerateRoute: (settings) => generateRoute(settings),
             home:
