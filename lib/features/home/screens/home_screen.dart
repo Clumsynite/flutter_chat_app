@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/config/env.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
+import 'package:flutter_chat_app/features/contacts/screens/contacts_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,15 +13,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentPage = 0;
+  int _currentPage = 1;
 
   final List<Widget> _pages = const [
     Center(
       child: Text("Home"),
     ),
-    Center(
-      child: Text("Tab 2"),
-    ),
+    ContactsScreen(),
     Center(
       child: Text("Tab 3"),
     ),
@@ -61,15 +60,15 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _currentPage,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.messenger_outline),
             label: "Messages",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Stats",
+            icon: Icon(Icons.groups),
+            label: "Contacts",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.account_circle),
             label: "Profile",
           ),
         ],
