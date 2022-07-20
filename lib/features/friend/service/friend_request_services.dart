@@ -17,7 +17,7 @@ class FriendRequestServices {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString(tokenKey);
       http.Response res = await http.get(
-        Uri.parse('$uri/friend/count'),
+        Uri.parse('$uri/friend-request/count'),
         headers: <String, String>{
           'Content-type': 'application/json; Character-type=UTF-8',
           tokenKey: token!
@@ -83,7 +83,7 @@ class FriendRequestServices {
       String? token = prefs.getString(tokenKey);
 
       http.Response res = await http.post(
-        Uri.parse('$uri/friend-request/accept'),
+        Uri.parse('$uri/friend'),
         headers: <String, String>{
           'Content-type': "application/json; charset=UTF-8",
           tokenKey: token!

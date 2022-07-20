@@ -45,7 +45,7 @@ class ContactsServices {
       String? token = prefs.getString(tokenKey);
 
       http.Response res = await http.post(
-        Uri.parse('$uri/friend'),
+        Uri.parse('$uri/friend-request'),
         headers: <String, String>{
           'Content-type': "application/json; charset=UTF-8",
           tokenKey: token!
@@ -75,7 +75,7 @@ class ContactsServices {
       String? token = prefs.getString(tokenKey);
 
       http.Response res = await http.delete(
-        Uri.parse('$uri/friend/$id'),
+        Uri.parse('$uri/friend-request/$id'),
         headers: <String, String>{
           'Content-type': "application/json; charset=UTF-8",
           tokenKey: token!
