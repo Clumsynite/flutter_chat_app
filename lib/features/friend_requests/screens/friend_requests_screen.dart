@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/widgets/loader.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
-import 'package:flutter_chat_app/features/friend/service/friend_request_services.dart';
+import 'package:flutter_chat_app/features/friend_requests/service/friend_request_services.dart';
 import 'package:flutter_chat_app/models/friend_request.dart';
 
 class FriendRequestsScreen extends StatefulWidget {

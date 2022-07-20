@@ -2,8 +2,8 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/features/contacts/screens/contacts_screen.dart';
-import 'package:flutter_chat_app/features/friend/screens/friend_requests_screen.dart';
-import 'package:flutter_chat_app/features/friend/service/friend_request_services.dart';
+import 'package:flutter_chat_app/features/friend_requests/screens/friend_requests_screen.dart';
+import 'package:flutter_chat_app/features/friend_requests/service/friend_request_services.dart';
 import 'package:flutter_chat_app/features/home/services/home_services.dart';
 
 class HomeScreen extends StatefulWidget {

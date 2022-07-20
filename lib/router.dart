@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/features/auth/screens/auth_screen.dart';
-import 'package:flutter_chat_app/features/friend/screens/friend_requests_screen.dart';
+import 'package:flutter_chat_app/features/friend_requests/screens/friend_requests_screen.dart';
 import 'package:flutter_chat_app/features/home/screens/home_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
