@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_chat_app/config/env.dart';
+import 'package:flutter_chat_app/constants/error_handling.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
 import 'package:flutter_chat_app/models/contact.dart';
 import 'package:http/http.dart' as http;
@@ -32,5 +33,35 @@ class ContactsServices {
       showSnackBar(context, e.toString());
     }
     return contacts;
+  }
+
+  void sendFriendRequest({
+    required BuildContext context,
+    required String id,
+    required VoidCallback onSuccess,
+  }) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString(tokenKey);
+
+      http.Response res = await http.post(
+        Uri.parse('$uri/friend'),
+        headers: <String, String>{
+          'Content-type': "application/json; charset=UTF-8",
+          tokenKey: token!
+        },
+        body: jsonEncode({'to': id}),
+      );
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          onSuccess();
+          showSnackBar(context, "Friend Request Sent");
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 }

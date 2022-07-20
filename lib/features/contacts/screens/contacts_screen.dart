@@ -33,6 +33,21 @@ class _ContactsScreenState extends State<ContactsScreen> {
     });
   }
 
+  void addFriend(String id) {
+    contactsServices.sendFriendRequest(
+        context: context,
+        id: id,
+        onSuccess: () {
+          int index =
+              contacts.indexWhere((Contact contact) => contact.id == id);
+          setState(() {
+            contacts[index] = contacts[index].copyWith(isRequested: true);
+          });
+        });
+  }
+
+  void cancelFriendRequest(String id) {}
+
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -84,7 +99,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
                         trailing: PopupMenuButton(
                           itemBuilder: (BuildContext context) =>
                               <PopupMenuEntry>[
-                            if (contact.isFriend == false)
+                            if (contact.isFriend == false &&
+                                contact.isRequested == false)
                               PopupMenuItem(
                                 child: Row(
                                   mainAxisAlignment:
@@ -97,7 +113,23 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                     Text("Add Friend"),
                                   ],
                                 ),
-                                onTap: () {},
+                                onTap: () => addFriend(contact.id),
+                              ),
+                            if (contact.isFriend == false &&
+                                contact.isRequested == true)
+                              PopupMenuItem(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Icon(
+                                      Icons.group_add,
+                                      color: Colors.black,
+                                    ),
+                                    Text("  Cancel Request"),
+                                  ],
+                                ),
+                                onTap: () => cancelFriendRequest(contact.id),
                               ),
                             if (contact.isFriend)
                               PopupMenuItem(
