@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class GlobalConfig {
@@ -13,4 +15,7 @@ class GlobalConfig {
     colors: [primaryBackgroundColor, darkerBackgroundColor],
     stops: [0.5, 1.0],
   );
+
+  get randomColour =>
+      Colors.primaries[Random().nextInt(Colors.primaries.length)];
 }
