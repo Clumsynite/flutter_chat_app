@@ -35,18 +35,29 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
   void addFriend(String id) {
     contactsServices.sendFriendRequest(
-        context: context,
-        id: id,
-        onSuccess: () {
-          int index =
-              contacts.indexWhere((Contact contact) => contact.id == id);
-          setState(() {
-            contacts[index] = contacts[index].copyWith(isRequested: true);
-          });
+      context: context,
+      id: id,
+      onSuccess: () {
+        int index = contacts.indexWhere((Contact contact) => contact.id == id);
+        setState(() {
+          contacts[index] = contacts[index].copyWith(isRequested: true);
         });
+      },
+    );
   }
 
-  void cancelFriendRequest(String id) {}
+  void cancelFriendRequest(String id) {
+    contactsServices.cancelFriendRequest(
+      context: context,
+      id: id,
+      onSuccess: () {
+        int index = contacts.indexWhere((Contact contact) => contact.id == id);
+        setState(() {
+          contacts[index] = contacts[index].copyWith(isRequested: false);
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
