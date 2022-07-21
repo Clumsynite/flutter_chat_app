@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/widgets/custom_avatar.dart';
 import 'package:flutter_chat_app/common/widgets/loader.dart';
-import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/features/contacts/services/contacts_services.dart';
 import 'package:flutter_chat_app/models/contact.dart';
 

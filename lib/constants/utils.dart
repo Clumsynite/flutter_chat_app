@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:dart_date/dart_date.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -27,4 +29,18 @@ Future<List<File>> pickImages() async {
     debugPrint(e.toString());
   }
   return images;
+}
+
+String getFormattedDate(String isoDate) {
+  return isoDate.isEmpty
+      ? DateTime.now().toHumanString()
+      : (DateTime.parse(isoDate).toHumanString());
+}
+
+DateTime getDateFromISO(String dateString) {
+  return dateString.isEmpty ? DateTime.now() : DateTime.parse(dateString);
+}
+
+String getRelativeTime(String dateString) {
+  return timeago.format(getDateFromISO(dateString));
 }

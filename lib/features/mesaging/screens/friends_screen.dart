@@ -1,8 +1,10 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/widgets/custom_avatar.dart';
 import 'package:flutter_chat_app/common/widgets/empty_screen.dart';
 import 'package:flutter_chat_app/common/widgets/loader.dart';
-import 'package:flutter_chat_app/config/global_config.dart';
+import 'package:flutter_chat_app/constants/utils.dart';
+import 'package:flutter_chat_app/features/mesaging/screens/messaging_screen.dart';
 import 'package:flutter_chat_app/features/mesaging/services/friends_screen_services.dart';
 import 'package:flutter_chat_app/models/friend.dart';
 
@@ -35,6 +37,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
     });
   }
 
+  void navigateToMessagingScreen(Friend friend) {
+    Navigator.pushNamed(
+      context,
+      MessagingScreen.routeName,
+      arguments: friend,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -63,8 +73,15 @@ class _FriendsScreenState extends State<FriendsScreen> {
                         itemBuilder: (context, index) {
                           Friend friend = friends[index];
                           return ListTile(
-                            leading: SizedBox(
-                              height: double.infinity,
+                            onTap: () => navigateToMessagingScreen(friend),
+                            leading: Badge(
+                              position: BadgePosition.bottomEnd(
+                                bottom: 0,
+                                end: 0,
+                              ),
+                              badgeColor: friend.isOnline
+                                  ? Colors.greenAccent
+                                  : Colors.redAccent,
                               child: CustomAvatar(
                                 username: friend.username[0].toUpperCase(),
                               ),
@@ -76,7 +93,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
                               ),
                             ),
                             subtitle: Text(
-                              friend.email,
+                              // friend.email,
+                              getRelativeTime(friend.lastSeen ?? ""),
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
