@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/common/widgets/custom_avatar.dart';
 import 'package:flutter_chat_app/common/widgets/empty_screen.dart';
 import 'package:flutter_chat_app/common/widgets/loader.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
@@ -134,16 +135,9 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
                             return ListTile(
                               leading: SizedBox(
                                 height: double.infinity,
-                                child: CircleAvatar(
-                                  backgroundColor: GlobalConfig().randomColour,
-                                  child: Text(
-                                    friendRequest.contact.username[0]
-                                        .toUpperCase(),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                child: CustomAvatar(
+                                  username: friendRequest.contact.username[0]
+                                      .toUpperCase(),
                                 ),
                               ),
                               title: Text(
