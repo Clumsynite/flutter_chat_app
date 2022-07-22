@@ -3,6 +3,7 @@ import 'package:flutter_chat_app/common/widgets/custom_avatar.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
 import 'package:flutter_chat_app/models/friend.dart';
+import 'package:flutter_chat_app/socket_client.dart';
 
 class MessagingScreen extends StatefulWidget {
   static const String routeName = "/messaging";
@@ -17,6 +18,13 @@ class MessagingScreen extends StatefulWidget {
 }
 
 class _MessagingScreenState extends State<MessagingScreen> {
+  SocketClient client = SocketClient();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

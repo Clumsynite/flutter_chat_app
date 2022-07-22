@@ -5,14 +5,19 @@ import 'package:flutter_chat_app/config/env.dart';
 import 'package:flutter_chat_app/constants/error_handling.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
 import 'package:flutter_chat_app/features/auth/screens/auth_screen.dart';
+import 'package:flutter_chat_app/models/user.dart';
+import 'package:flutter_chat_app/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class HomeServices {
-  void logout({
-    required BuildContext context,
-  }) async {
+  void logout(
+      {required BuildContext context, required Function onSuccess}) async {
     try {
+      User user = Provider.of<UserProvider>(context, listen: false).user;
+      onSuccess(user.id);
+
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       await sharedPreferences.setString(tokenKey, '');

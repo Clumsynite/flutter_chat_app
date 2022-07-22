@@ -54,7 +54,7 @@ class AuthServices {
     required BuildContext context,
     required String username,
     required String password,
-    required VoidCallback onSuccess,
+    required Function onSuccess,
     required VoidCallback onError,
   }) async {
     try {
@@ -82,7 +82,7 @@ class AuthServices {
             HomeScreen.routeName,
             (route) => false,
           );
-          onSuccess();
+          onSuccess(jsonDecode(res.body)['_id']);
         },
         onError: onError,
       );
@@ -92,7 +92,10 @@ class AuthServices {
     }
   }
 
-  Future<void> getUser({required BuildContext context}) async {
+  Future<void> getUser({
+    required BuildContext context,
+    required Function onSuccess,
+  }) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString(tokenKey);
@@ -119,6 +122,7 @@ class AuthServices {
           context,
           listen: false,
         ).setUser(userRes.body);
+        if (token.isNotEmpty) onSuccess(jsonDecode(userRes.body)['_id']);
       }
     } catch (e) {
       showSnackBar(context, e.toString());
