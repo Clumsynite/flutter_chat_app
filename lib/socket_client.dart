@@ -33,4 +33,6 @@ class SocketClient {
   void notifyUserOffline(String id) {
     socket.emit("client_offline", id);
   }
+
+  get on => socket.on;
 }

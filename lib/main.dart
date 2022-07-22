@@ -63,7 +63,6 @@ class _FlutterChatAppState extends State<FlutterChatApp> {
     });
     await authServices.getUser(
       context: context,
-      onSuccess: client.notifyUserOnline,
     );
     setState(() {
       isLoading = false;

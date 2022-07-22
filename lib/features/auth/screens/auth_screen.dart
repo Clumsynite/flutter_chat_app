@@ -81,7 +81,6 @@ class _AuthScreenState extends State<AuthScreen> {
         password: _passwordController.text,
         onSuccess: (String id) {
           _buttonController.success();
-          client.notifyUserOnline(id);
         },
         onError: () {
           _buttonController.error();

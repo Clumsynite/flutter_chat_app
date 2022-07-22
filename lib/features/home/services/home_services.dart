@@ -12,8 +12,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class HomeServices {
-  void logout(
-      {required BuildContext context, required Function onSuccess}) async {
+  void logout({
+    required BuildContext context,
+    required Function onSuccess,
+  }) async {
     try {
       User user = Provider.of<UserProvider>(context, listen: false).user;
       onSuccess(user.id);
