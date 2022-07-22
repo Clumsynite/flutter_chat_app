@@ -26,6 +26,12 @@ class _MessagingScreenState extends State<MessagingScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    // client.socket.off();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(

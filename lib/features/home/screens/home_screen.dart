@@ -25,13 +25,23 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentPage = 0;
   int friendRequestCount = 0;
 
-  final List<Widget> _pages = const [
-    FriendsScreen(),
-    ContactsScreen(),
-    Center(
-      child: Text("Tab 3"),
-    ),
-  ];
+  List<Widget> _pages(String id) {
+    return [
+      FriendsScreen(id: id),
+      ContactsScreen(),
+      Center(
+        child: Text("Tab 3"),
+      ),
+    ];
+  }
+
+  // final List<Widget> _pages = const [
+  //   FriendsScreen(),
+  //   ContactsScreen(),
+  //   Center(
+  //     child: Text("Tab 3"),
+  //   ),
+  // ];
 
   void fetchFriendRequestCount() async {
     friendRequestCount =
@@ -62,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
+    client.socket.off('${widget.id}_friend');
   }
 
   void onLogout() {
@@ -128,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: _pages[_currentPage],
+      body: _pages(widget.id)[_currentPage],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentPage,
         items: const [

@@ -6,7 +6,6 @@ import 'package:flutter_chat_app/features/home/screens/home_screen.dart';
 import 'package:flutter_chat_app/models/user.dart';
 import 'package:flutter_chat_app/provider/user_provider.dart';
 import 'package:flutter_chat_app/router.dart';
-import 'package:flutter_chat_app/socket_client.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -49,8 +48,6 @@ class _FlutterChatAppState extends State<FlutterChatApp> {
   final AuthServices authServices = AuthServices();
   bool isLoading = false;
 
-  SocketClient client = SocketClient();
-
   @override
   void initState() {
     super.initState();
@@ -67,6 +64,11 @@ class _FlutterChatAppState extends State<FlutterChatApp> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

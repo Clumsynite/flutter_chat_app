@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/widgets/custom_input.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/features/auth/services/auth_services.dart';
-import 'package:flutter_chat_app/socket_client.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 enum Auth {
@@ -20,7 +19,6 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final AuthServices authServices = AuthServices();
-  final SocketClient client = SocketClient();
 
   Auth _auth = Auth.signup;
 

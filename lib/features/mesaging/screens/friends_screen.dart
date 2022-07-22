@@ -13,7 +13,11 @@ import 'package:flutter_chat_app/socket_client.dart';
 import 'package:provider/provider.dart';
 
 class FriendsScreen extends StatefulWidget {
-  const FriendsScreen({Key? key}) : super(key: key);
+  final String id;
+  const FriendsScreen({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   State<FriendsScreen> createState() => _FriendsScreenState();
@@ -49,6 +53,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
       friends[index] = friends[index].copyWith(isOnline: false);
       setState(() {});
     });
+
+    client.socket.on('${user.id}_friend', (userId) {
+      fetchAllFriends();
+    });
   }
 
   void fetchAllFriends() async {
@@ -59,6 +67,14 @@ class _FriendsScreenState extends State<FriendsScreen> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    client.socket.off('${widget.id}_online');
+    client.socket.off('${widget.id}_offline');
+    client.socket.off('${widget.id}_friend');
   }
 
   void navigateToMessagingScreen(Friend friend) {
