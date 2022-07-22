@@ -25,4 +25,12 @@ class SocketClient {
   factory SocketClient() {
     return _socketApi;
   }
+
+  void notifyUserOnline(String id) {
+    socket.emit("client_online", id);
+  }
+
+  void notifyUserOffline(String id) {
+    socket.emit("client_offline", id);
+  }
 }

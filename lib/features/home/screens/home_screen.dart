@@ -53,14 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void disconnectUser(String id) {
-    client.socket.emit("client_offline", id);
-  }
-
   void onLogout() {
     HomeServices().logout(
       context: context,
-      onSuccess: disconnectUser,
+      onSuccess: client.notifyUserOffline,
     );
   }
 
