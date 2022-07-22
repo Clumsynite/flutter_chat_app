@@ -88,8 +88,11 @@ class _FlutterChatAppState extends State<FlutterChatApp> {
               // useMaterial3: true, // changes UI in all places
             ),
             onGenerateRoute: (settings) => generateRoute(settings),
-            home:
-                user.token.isNotEmpty ? const HomeScreen() : const AuthScreen(),
+            home: user.token.isNotEmpty
+                ? HomeScreen(
+                    id: user.id,
+                  )
+                : const AuthScreen(),
           );
   }
 }

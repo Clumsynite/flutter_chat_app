@@ -13,8 +13,9 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
       );
     case HomeScreen.routeName:
+      String id = routeSettings.arguments as String;
       return MaterialPageRoute(
-        builder: (_) => const HomeScreen(),
+        builder: (_) => HomeScreen(id: id),
         settings: routeSettings,
       );
     case FriendRequestsScreen.routeName:

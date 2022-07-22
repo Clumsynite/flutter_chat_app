@@ -9,7 +9,11 @@ import 'package:flutter_chat_app/socket_client.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = "/home";
-  const HomeScreen({Key? key}) : super(key: key);
+  final String id;
+  const HomeScreen({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -42,10 +46,17 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void listenToFriendRequests() {
+    client.socket.on('${widget.id}_friend', (data) {
+      fetchFriendRequestCount();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     fetchFriendRequestCount();
+    listenToFriendRequests();
   }
 
   @override

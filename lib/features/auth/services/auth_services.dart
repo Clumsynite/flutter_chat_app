@@ -81,6 +81,7 @@ class AuthServices {
             context,
             HomeScreen.routeName,
             (route) => false,
+            arguments: jsonDecode(res.body)["_id"],
           );
           onSuccess();
         },
@@ -94,7 +95,6 @@ class AuthServices {
 
   Future<void> getUser({
     required BuildContext context,
-    // required Function onSuccess,
   }) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -122,7 +122,6 @@ class AuthServices {
           context,
           listen: false,
         ).setUser(userRes.body);
-        // if (token.isNotEmpty) onSuccess(jsonDecode(userRes.body)['_id']);
       }
     } catch (e) {
       showSnackBar(context, e.toString());
