@@ -62,7 +62,15 @@ class _ContactsScreenState extends State<ContactsScreen> {
     contactsServices.removeFriend(
       context: context,
       id: id,
-      onSuccess: () {},
+      onSuccess: () {
+        int index = contacts.indexWhere((Contact contact) => contact.id == id);
+        setState(() {
+          contacts[index] = contacts[index].copyWith(
+            isRequested: false,
+            isFriend: false,
+          );
+        });
+      },
     );
   }
 
