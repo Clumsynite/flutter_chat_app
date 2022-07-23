@@ -7,10 +7,7 @@ import 'package:flutter_chat_app/constants/utils.dart';
 import 'package:flutter_chat_app/features/mesaging/screens/messaging_screen.dart';
 import 'package:flutter_chat_app/features/mesaging/services/friends_screen_services.dart';
 import 'package:flutter_chat_app/models/friend.dart';
-import 'package:flutter_chat_app/models/user.dart';
-import 'package:flutter_chat_app/provider/user_provider.dart';
 import 'package:flutter_chat_app/socket_client.dart';
-import 'package:provider/provider.dart';
 
 class FriendsScreen extends StatefulWidget {
   final String id;
@@ -38,23 +35,21 @@ class _FriendsScreenState extends State<FriendsScreen> {
   }
 
   void listenToUserPresence() {
-    User user = Provider.of<UserProvider>(context, listen: false).user;
-
     // switch isOnline when friend is online
-    client.socket.on('${user.id}_online', (userId) {
+    client.socket.on('${widget.id}_online', (userId) {
       int index = friends.indexWhere((Friend friend) => friend.id == userId);
       friends[index] = friends[index].copyWith(isOnline: true);
       setState(() {});
     });
 
     // switch isOnline when friend goes offline
-    client.socket.on('${user.id}_offline', (userId) {
+    client.socket.on('${widget.id}_offline', (userId) {
       int index = friends.indexWhere((Friend friend) => friend.id == userId);
       friends[index] = friends[index].copyWith(isOnline: false);
       setState(() {});
     });
 
-    client.socket.on('${user.id}_friend', (userId) {
+    client.socket.on('${widget.id}_friend', (userId) {
       fetchAllFriends();
     });
   }
@@ -81,7 +76,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
     Navigator.pushNamed(
       context,
       MessagingScreen.routeName,
-      arguments: friend,
+      arguments: MessagingScreenArguments(
+        friend,
+        widget.id,
+      ),
     );
   }
 
