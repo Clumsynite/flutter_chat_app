@@ -24,9 +24,13 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
       );
     case MessagingScreen.routeName:
-      Friend friend = routeSettings.arguments as Friend;
+      MessagingScreenArguments arguments =
+          routeSettings.arguments as MessagingScreenArguments;
       return MaterialPageRoute(
-        builder: (_) => MessagingScreen(friend: friend),
+        builder: (_) => MessagingScreen(
+          friend: arguments.friend,
+          id: arguments.id,
+        ),
         settings: routeSettings,
       );
     default:
