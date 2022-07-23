@@ -28,8 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _pages(String id) {
     return [
       FriendsScreen(id: id),
-      ContactsScreen(),
-      Center(
+      const ContactsScreen(),
+      const Center(
         child: Text("Tab 3"),
       ),
     ];

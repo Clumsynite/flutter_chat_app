@@ -16,8 +16,6 @@ class SocketClient {
         .build(),
   );
 
-  Color randomColor = GlobalConfig().randomColour;
-
   // An internal private constructor to access it for only once for static instance of class.
   SocketClient._internal();
 
@@ -33,6 +31,4 @@ class SocketClient {
   void notifyUserOffline(String id) {
     socket.emit("client_offline", id);
   }
-
-  get on => socket.on;
 }
