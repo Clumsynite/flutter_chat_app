@@ -71,10 +71,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     client.socket.off('${widget.id}_online');
     client.socket.off('${widget.id}_offline');
     client.socket.off('${widget.id}_friend');
+    super.dispose();
   }
 
   void navigateToMessagingScreen(Friend friend) {

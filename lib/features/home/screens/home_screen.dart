@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     friendRequestCount =
         await homeServices.getFriendRequestCount(context: context);
     setState(() {});
+    listenToFriendRequests();
   }
 
   void updatePage(int page) {
@@ -64,15 +65,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    super.initState();
     fetchFriendRequestCount();
-    listenToFriendRequests();
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     client.socket.off('${widget.id}_friend');
+    super.dispose();
   }
 
   void onLogout() {
