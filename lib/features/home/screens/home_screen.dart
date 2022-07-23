@@ -35,14 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
-  // final List<Widget> _pages = const [
-  //   FriendsScreen(),
-  //   ContactsScreen(),
-  //   Center(
-  //     child: Text("Tab 3"),
-  //   ),
-  // ];
-
   void fetchFriendRequestCount() async {
     friendRequestCount =
         await homeServices.getFriendRequestCount(context: context);
