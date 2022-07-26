@@ -22,8 +22,8 @@ class MessageBox extends StatefulWidget {
 class _MessageBoxState extends State<MessageBox> {
   @override
   Widget build(BuildContext context) {
-    // final bool wasSent = widget.message.from != widget.id;
-    bool wasSent = Random().nextInt(100) % 2 == 0;
+    final bool wasSent = widget.message.from != widget.id;
+    // bool wasSent = Random().nextInt(100) % 2 == 0;
 
     LinearGradient sentGradient = const LinearGradient(colors: [
       // Color(0xff219EBC),
