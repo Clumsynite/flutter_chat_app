@@ -31,4 +31,14 @@ class SocketClient {
   void notifyUserOffline(String id) {
     socket.emit("client_offline", id);
   }
+
+  void notifyUserTyping({
+    required String userId,
+    required bool isTyping,
+  }) {
+    socket.emit("client_typing", {
+      "userId": userId,
+      'isTyping': isTyping,
+    });
+  }
 }

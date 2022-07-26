@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/widgets/custom_avatar.dart';
+import 'package:flutter_chat_app/common/widgets/loader.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
 import 'package:flutter_chat_app/features/mesaging/services/messaging_services.dart';
@@ -34,10 +35,12 @@ class _MessagingScreenState extends State<MessagingScreen> {
   SocketClient client = SocketClient();
 
   Friend? friend;
+  bool isFriendTyping = false;
   bool isSending = false;
   bool isLoading = false;
   List<Message> messages = [];
   final TextEditingController _messageController = TextEditingController();
+  final FocusNode _focus = FocusNode();
 
   @override
   void initState() {
@@ -45,6 +48,14 @@ class _MessagingScreenState extends State<MessagingScreen> {
     friend = widget.friend;
     listenToUserPresence();
     getAllMessages();
+    _focus.addListener(inputFocusListener);
+  }
+
+  void inputFocusListener() {
+    client.notifyUserTyping(
+      userId: widget.id,
+      isTyping: _focus.hasFocus,
+    );
   }
 
   void listenToUserPresence() {
@@ -58,6 +69,13 @@ class _MessagingScreenState extends State<MessagingScreen> {
     client.socket.on('${widget.id}_offline', (userId) {
       friend = widget.friend.copyWith(isOnline: false);
       setState(() {});
+    });
+
+    // switch isFriendTyping according to friend's response
+    client.socket.on('${friend!.id}_typing', (isTyping) {
+      setState(() {
+        isFriendTyping = isTyping;
+      });
     });
   }
 
@@ -111,7 +129,10 @@ class _MessagingScreenState extends State<MessagingScreen> {
   void dispose() {
     client.socket.off('${widget.id}_online');
     client.socket.off('${widget.id}_offline');
+    client.socket.off('${friend!.id}_typing');
     _messageController.dispose();
+    _focus.removeListener(inputFocusListener);
+    _focus.dispose();
     super.dispose();
   }
 
@@ -158,7 +179,9 @@ class _MessagingScreenState extends State<MessagingScreen> {
                   ),
                   Text(
                     friend!.isOnline
-                        ? "Online"
+                        ? isFriendTyping
+                            ? "typing..."
+                            : "Online"
                         : getRelativeTime(friend!.lastSeen ?? ""),
                     style: const TextStyle(
                       fontSize: 10,
@@ -179,19 +202,21 @@ class _MessagingScreenState extends State<MessagingScreen> {
             child: Container(
               color: Colors.lightBlue[50],
               width: double.infinity,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: messages
-                      .map(
-                        (message) => MessageBox(
-                          message: message,
-                          friendId: friend!.id,
-                          id: widget.id,
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
+              child: isLoading
+                  ? const Loader()
+                  : SingleChildScrollView(
+                      child: Column(
+                        children: messages
+                            .map(
+                              (message) => MessageBox(
+                                message: message,
+                                friendId: friend!.id,
+                                id: widget.id,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
             ),
           ),
           Container(
@@ -205,6 +230,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
                       vertical: 2,
                     ),
                     child: TextField(
+                      focusNode: _focus,
                       controller: _messageController,
                       keyboardType: TextInputType.multiline,
                       minLines: 1,
