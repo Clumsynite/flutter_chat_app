@@ -4,6 +4,7 @@ import 'package:flutter_chat_app/common/widgets/custom_avatar.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
 import 'package:flutter_chat_app/features/mesaging/services/messaging_services.dart';
+import 'package:flutter_chat_app/features/mesaging/widgets/message_box.dart';
 import 'package:flutter_chat_app/models/friend.dart';
 import 'package:flutter_chat_app/models/message.dart';
 import 'package:flutter_chat_app/socket_client.dart';
@@ -180,12 +181,15 @@ class _MessagingScreenState extends State<MessagingScreen> {
               width: double.infinity,
               child: SingleChildScrollView(
                 child: Column(
-                  children: [
-                    ...List.generate(
-                      100,
-                      (index) => Text('Index is $index'),
-                    ).toList(),
-                  ],
+                  children: messages
+                      .map(
+                        (message) => MessageBox(
+                          message: message,
+                          friendId: friend!.id,
+                          id: widget.id,
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             ),
@@ -202,6 +206,9 @@ class _MessagingScreenState extends State<MessagingScreen> {
                     ),
                     child: TextField(
                       controller: _messageController,
+                      keyboardType: TextInputType.multiline,
+                      minLines: 1,
+                      maxLines: 4,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Start typing...',
