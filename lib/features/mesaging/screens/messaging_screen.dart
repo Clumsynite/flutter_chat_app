@@ -56,6 +56,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
   void dispose() {
     client.socket.off('${widget.id}_online');
     client.socket.off('${widget.id}_offline');
+    _messageController.dispose();
     super.dispose();
   }
 
