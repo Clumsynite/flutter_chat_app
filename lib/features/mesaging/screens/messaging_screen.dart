@@ -29,6 +29,7 @@ class MessagingScreen extends StatefulWidget {
 class _MessagingScreenState extends State<MessagingScreen> {
   SocketClient client = SocketClient();
   Friend? friend;
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   void initState() {
@@ -61,6 +62,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
@@ -113,6 +115,61 @@ class _MessagingScreenState extends State<MessagingScreen> {
           ),
         ),
       ),
+      body: Column(
+        children: [
+          // width: double.infinity,
+          Expanded(
+            flex: 1,
+            child: Container(
+              color: Colors.lightBlue[50],
+              width: double.infinity,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ...List.generate(
+                      100,
+                      (index) => Text('Index is $index'),
+                    ).toList(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Container(
+            color: Colors.blue[50],
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 2,
+                      vertical: 2,
+                    ),
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Start typing...',
+                      ),
+                      // autofocus: true,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  splashColor: Colors.green,
+                  icon: const Icon(
+                    Icons.send_rounded,
+                    color: Colors.blue,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+
+      // bottomNavigationBar:
     );
   }
 }
