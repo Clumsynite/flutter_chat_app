@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/widgets/custom_avatar.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
+import 'package:flutter_chat_app/features/mesaging/services/messaging_services.dart';
 import 'package:flutter_chat_app/models/friend.dart';
+import 'package:flutter_chat_app/models/message.dart';
 import 'package:flutter_chat_app/socket_client.dart';
 
 class MessagingScreenArguments {
@@ -27,9 +29,11 @@ class MessagingScreen extends StatefulWidget {
 }
 
 class _MessagingScreenState extends State<MessagingScreen> {
+  final MessagingServices messagingServices = MessagingServices();
   SocketClient client = SocketClient();
   Friend? friend;
   final TextEditingController _messageController = TextEditingController();
+  bool isSending = false;
 
   @override
   void initState() {
@@ -50,6 +54,33 @@ class _MessagingScreenState extends State<MessagingScreen> {
       friend = widget.friend.copyWith(isOnline: false);
       setState(() {});
     });
+  }
+
+  void sendMessage() async {
+    try {
+      String text = _messageController.text;
+      if (isSending || text.isEmpty) return;
+
+      setState(() {
+        isSending = true;
+      });
+      Message? message = await messagingServices.sendMessage(
+        context: context,
+        to: friend!.id,
+        text: text,
+      );
+      if (message!.id.isNotEmpty) {
+        // TODO: add message to messages array
+        _messageController.clear();
+      }
+      setState(() {
+        isSending = false;
+      });
+    } catch (e) {
+      setState(() {
+        isSending = false;
+      });
+    }
   }
 
   @override
@@ -157,11 +188,11 @@ class _MessagingScreenState extends State<MessagingScreen> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: sendMessage,
                   splashColor: Colors.green,
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.send_rounded,
-                    color: Colors.blue,
+                    color: isSending ? Colors.blue[100] : Colors.blue,
                   ),
                 )
               ],
