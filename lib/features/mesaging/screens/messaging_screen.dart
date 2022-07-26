@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/common/widgets/custom_avatar.dart';
@@ -39,8 +41,10 @@ class _MessagingScreenState extends State<MessagingScreen> {
   bool isSending = false;
   bool isLoading = false;
   List<Message> messages = [];
+
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _focus = FocusNode();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -77,6 +81,19 @@ class _MessagingScreenState extends State<MessagingScreen> {
         isFriendTyping = isTyping;
       });
     });
+
+    // listen to messages which are sent to user from friend
+    client.socket.on('message_to_${widget.id}_from_${friend!.id}', (message) {
+      Message newMessage = Message.fromJson(jsonEncode(message));
+      setState(() {
+        messages.add(newMessage);
+      });
+      scrollToBottom();
+    });
+  }
+
+  void scrollToBottom() {
+    _scrollController.jumpTo(_scrollController.position.minScrollExtent);
   }
 
   void getAllMessages() async {
@@ -91,6 +108,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
       setState(() {
         isLoading = false;
       });
+      scrollToBottom();
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -114,6 +132,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
       if (message!.id.isNotEmpty) {
         messages.add(message);
         _messageController.clear();
+        scrollToBottom();
       }
       setState(() {
         isSending = false;
@@ -130,9 +149,11 @@ class _MessagingScreenState extends State<MessagingScreen> {
     client.socket.off('${widget.id}_online');
     client.socket.off('${widget.id}_offline');
     client.socket.off('${friend!.id}_typing');
+    client.socket.off('message_to_${widget.id}_from_${friend!.id}');
     _messageController.dispose();
     _focus.removeListener(inputFocusListener);
     _focus.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -204,18 +225,19 @@ class _MessagingScreenState extends State<MessagingScreen> {
               width: double.infinity,
               child: isLoading
                   ? const Loader()
-                  : SingleChildScrollView(
-                      child: Column(
-                        children: messages
-                            .map(
-                              (message) => MessageBox(
-                                message: message,
-                                friendId: friend!.id,
-                                id: widget.id,
-                              ),
-                            )
-                            .toList(),
-                      ),
+                  : ListView.builder(
+                      reverse: true,
+                      padding: const EdgeInsets.only(bottom: 5),
+                      itemCount: messages.length,
+                      controller: _scrollController,
+                      itemBuilder: (context, index) {
+                        Message message = messages[messages.length - 1 - index];
+                        return MessageBox(
+                          message: message,
+                          friendId: friend!.id,
+                          id: widget.id,
+                        );
+                      },
                     ),
             ),
           ),
