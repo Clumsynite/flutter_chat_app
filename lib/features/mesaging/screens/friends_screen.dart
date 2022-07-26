@@ -151,9 +151,11 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                     ),
                                   )
                                 : Text(
-                                    getRelativeTime(
-                                      friend.lastSeen ?? "",
-                                    ),
+                                    friend.isOnline
+                                        ? "Online"
+                                        : getRelativeTime(
+                                            friend.lastSeen ?? "",
+                                          ),
                                     style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey,
