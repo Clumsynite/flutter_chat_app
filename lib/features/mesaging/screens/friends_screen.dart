@@ -52,6 +52,16 @@ class _FriendsScreenState extends State<FriendsScreen> {
     client.socket.on('${widget.id}_friend', (userId) {
       fetchAllFriends();
     });
+
+    // switch isOnline when friend goes offline
+    client.socket.on('${widget.id}_friend_typing', (data) {
+      if (data['userId'] != widget.id) {
+        int index =
+            friends.indexWhere((Friend friend) => friend.id == data['userId']);
+        friends[index] = friends[index].copyWith(isTyping: data['isTyping']);
+        setState(() {});
+      }
+    });
   }
 
   void fetchAllFriends() async {
@@ -69,6 +79,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
     client.socket.off('${widget.id}_online');
     client.socket.off('${widget.id}_offline');
     client.socket.off('${widget.id}_friend');
+    client.socket.off('${widget.id}_friend_typing');
     super.dispose();
   }
 
@@ -130,14 +141,24 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                 fontSize: 18,
                               ),
                             ),
-                            subtitle: Text(
-                              // friend.email,
-                              getRelativeTime(friend.lastSeen ?? ""),
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
-                            ),
+                            subtitle: friend.isTyping
+                                ? const Text(
+                                    "typing...",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : Text(
+                                    getRelativeTime(
+                                      friend.lastSeen ?? "",
+                                    ),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
                           );
                         },
                       ),

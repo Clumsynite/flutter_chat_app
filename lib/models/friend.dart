@@ -11,6 +11,7 @@ class Friend {
   final bool isOnline;
   String? lastSeen;
   final String createdAt;
+  final bool isTyping;
 
   Friend({
     required this.id,
@@ -22,6 +23,7 @@ class Friend {
     required this.isOnline,
     this.lastSeen,
     required this.createdAt,
+    required this.isTyping,
   });
 
   Map<String, dynamic> toMap() {
@@ -35,6 +37,7 @@ class Friend {
       'isOnline': isOnline,
       'lastSeen': lastSeen,
       'createdAt': createdAt,
+      'isTyping': isTyping,
     };
   }
 
@@ -49,6 +52,7 @@ class Friend {
       isOnline: map['isOnline'] as bool,
       lastSeen: map['lastSeen'] != null ? map['lastSeen'] as String : null,
       createdAt: map['createdAt'] as String,
+      isTyping: map['isTyping'] ?? false,
     );
   }
 
@@ -67,6 +71,7 @@ class Friend {
     bool? isOnline,
     String? lastSeen,
     String? createdAt,
+    bool? isTyping,
   }) {
     return Friend(
       id: id ?? this.id,
@@ -78,6 +83,7 @@ class Friend {
       isOnline: isOnline ?? this.isOnline,
       lastSeen: lastSeen ?? this.lastSeen,
       createdAt: createdAt ?? this.createdAt,
+      isTyping: isTyping ?? this.isTyping,
     );
   }
 }
