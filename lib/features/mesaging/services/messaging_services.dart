@@ -62,7 +62,7 @@ class MessagingServices {
         response: res,
         context: context,
         onSuccess: () {
-          message = Message.fromJson(jsonDecode(res.body));
+          message = Message.fromJson(res.body);
         },
       );
     } catch (e) {

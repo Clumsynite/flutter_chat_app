@@ -31,15 +31,19 @@ class MessagingScreen extends StatefulWidget {
 class _MessagingScreenState extends State<MessagingScreen> {
   final MessagingServices messagingServices = MessagingServices();
   SocketClient client = SocketClient();
+
   Friend? friend;
-  final TextEditingController _messageController = TextEditingController();
   bool isSending = false;
+  bool isLoading = false;
+  List<Message> messages = [];
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     friend = widget.friend;
     listenToUserPresence();
+    getAllMessages();
   }
 
   void listenToUserPresence() {
@@ -56,11 +60,30 @@ class _MessagingScreenState extends State<MessagingScreen> {
     });
   }
 
+  void getAllMessages() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      messages = await messagingServices.getAllMessages(
+        context: context,
+        friendId: friend!.id,
+      );
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   void sendMessage() async {
     try {
       String text = _messageController.text;
       if (isSending || text.isEmpty) return;
-
+      FocusScope.of(context).unfocus();
       setState(() {
         isSending = true;
       });
@@ -70,7 +93,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
         text: text,
       );
       if (message!.id.isNotEmpty) {
-        // TODO: add message to messages array
+        messages.add(message);
         _messageController.clear();
       }
       setState(() {
