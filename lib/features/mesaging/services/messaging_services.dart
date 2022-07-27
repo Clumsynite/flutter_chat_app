@@ -70,4 +70,28 @@ class MessagingServices {
     }
     return message;
   }
+
+  void deleteMessage({
+    required BuildContext context,
+    required String ids,
+  }) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString(tokenKey);
+      http.Response res = await http.delete(
+        Uri.parse('$uri/message/$ids'),
+        headers: <String, String>{
+          'Content-type': "application/json; charset=UTF-8",
+          tokenKey: token!
+        },
+      );
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {},
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
 }

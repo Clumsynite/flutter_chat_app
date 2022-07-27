@@ -157,7 +157,29 @@ class _MessagingScreenState extends State<MessagingScreen> {
     setState(() {});
   }
 
-  void deleteSelectedMessages() {}
+  void deleteSelectedMessages() {
+    String? error;
+    for (int i = 0; i < selectedMessages.length; i++) {
+      Message currentMessage =
+          messages.singleWhere((element) => element.id == selectedMessages[i]);
+      if (![widget.id, friend!.id].contains(currentMessage.from) ||
+          ![widget.id, friend!.id].contains(currentMessage.to)) {
+        error = "Not Authorised";
+      }
+    }
+    if (error != null) return showSnackBar(context, error);
+
+    String selectedIds = selectedMessages.join("&");
+    messagingServices.deleteMessage(context: context, ids: selectedIds);
+
+    for (int i = 0; i < selectedMessages.length; i++) {
+      messages
+          .removeWhere((Message message) => message.id == selectedMessages[i]);
+    }
+    setState(() {
+      selectedMessages = [];
+    });
+  }
 
   void clearSelctedMessages() {
     setState(() {
