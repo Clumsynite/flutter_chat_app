@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     fetchFriendRequestCount();
     super.initState();
+    client.notifyUserOnline(widget.id);
   }
 
   @override
