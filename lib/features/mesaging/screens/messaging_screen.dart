@@ -41,6 +41,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
   bool isSending = false;
   bool isLoading = false;
   List<Message> messages = [];
+  List<String> selectedMessages = [];
 
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _focus = FocusNode();
@@ -145,6 +146,25 @@ class _MessagingScreenState extends State<MessagingScreen> {
     }
   }
 
+  void onSelectMessage(Message message) {
+    int index = selectedMessages.indexOf(message.id);
+
+    if (index == -1) {
+      selectedMessages.add(message.id);
+    } else {
+      selectedMessages.removeAt(index);
+    }
+    setState(() {});
+  }
+
+  void deleteSelectedMessages() {}
+
+  void clearSelctedMessages() {
+    setState(() {
+      selectedMessages = [];
+    });
+  }
+
   @override
   void dispose() {
     client.socket.off('${widget.id}_online');
@@ -170,50 +190,78 @@ class _MessagingScreenState extends State<MessagingScreen> {
               gradient: GlobalConfig.appBarGradient,
             ),
           ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Badge(
-                position: BadgePosition.bottomEnd(
-                  bottom: 0,
-                  end: 0,
-                ),
-                badgeColor:
-                    friend!.isOnline ? Colors.greenAccent : Colors.redAccent,
-                child: CustomAvatar(
-                  username: friend!.username[0].toUpperCase(),
-                  fontSize: 14,
-                  radius: 14,
-                ),
-              ),
-              const SizedBox(width: 20),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    friend!.username,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
+          title: selectedMessages.isEmpty
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Badge(
+                      position: BadgePosition.bottomEnd(
+                        bottom: 0,
+                        end: 0,
+                      ),
+                      badgeColor: friend!.isOnline
+                          ? Colors.greenAccent
+                          : Colors.redAccent,
+                      child: CustomAvatar(
+                        username: friend!.username[0].toUpperCase(),
+                        fontSize: 14,
+                        radius: 14,
+                      ),
                     ),
+                    const SizedBox(width: 20),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          friend!.username,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          friend!.isOnline
+                              ? isFriendTyping
+                                  ? "typing..."
+                                  : "Online"
+                              : getRelativeTime(friend!.lastSeen ?? ""),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              : Text(
+                  selectedMessages.length.toString(),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
                   ),
-                  Text(
-                    friend!.isOnline
-                        ? isFriendTyping
-                            ? "typing..."
-                            : "Online"
-                        : getRelativeTime(friend!.lastSeen ?? ""),
-                    style: const TextStyle(
-                      fontSize: 10,
-                      color: Colors.black,
+                ),
+          actions: selectedMessages.isEmpty
+              ? null
+              : [
+                  IconButton(
+                    onPressed: deleteSelectedMessages,
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.red.shade600,
                     ),
                   ),
                 ],
-              ),
-            ],
-          ),
+          leading: selectedMessages.isEmpty
+              ? null
+              : IconButton(
+                  onPressed: clearSelctedMessages,
+                  icon: const Icon(
+                    Icons.arrow_back,
+                  ),
+                ),
         ),
       ),
       body: Column(
@@ -233,10 +281,31 @@ class _MessagingScreenState extends State<MessagingScreen> {
                       controller: _scrollController,
                       itemBuilder: (context, index) {
                         Message message = messages[messages.length - 1 - index];
-                        return MessageBox(
-                          message: message,
-                          friendId: friend!.id,
-                          id: widget.id,
+                        bool isSelected = selectedMessages.contains(message.id);
+                        return GestureDetector(
+                          onTap: () => selectedMessages.isEmpty
+                              ? null
+                              : onSelectMessage(message),
+                          onLongPress: () => onSelectMessage(message),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(vertical: 1),
+                            decoration: BoxDecoration(
+                              boxShadow: isSelected
+                                  ? [
+                                      BoxShadow(
+                                        color: Colors.lightBlue.shade200,
+                                      )
+                                    ]
+                                  : [],
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            child: MessageBox(
+                              message: message,
+                              friendId: friend!.id,
+                              id: widget.id,
+                              isSelected: isSelected,
+                            ),
+                          ),
                         );
                       },
                     ),

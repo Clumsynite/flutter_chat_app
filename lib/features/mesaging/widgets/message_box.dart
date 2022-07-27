@@ -5,11 +5,13 @@ class MessageBox extends StatefulWidget {
   final Message message;
   final String friendId;
   final String id;
+  final bool isSelected;
   const MessageBox({
     Key? key,
     required this.message,
     required this.friendId,
     required this.id,
+    required this.isSelected,
   }) : super(key: key);
 
   @override
