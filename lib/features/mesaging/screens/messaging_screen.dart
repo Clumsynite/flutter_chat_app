@@ -88,6 +88,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
       setState(() {
         messages.add(newMessage);
       });
+      client.notifyMessageRead(newMessage.id);
       scrollToBottom();
     });
   }

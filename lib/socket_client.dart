@@ -41,4 +41,8 @@ class SocketClient {
       'isTyping': isTyping,
     });
   }
+
+  void notifyMessageRead(String id) {
+    socket.emit("message_read", id);
+  }
 }

@@ -62,6 +62,22 @@ class _FriendsScreenState extends State<FriendsScreen> {
         setState(() {});
       }
     });
+
+    client.socket.on('${widget.id}_unread', (userId) {
+      int index = friends.indexWhere((Friend friend) => friend.id == userId);
+      Friend oldFriend = friends[index];
+      friends[index] =
+          friends[index].copyWith(unreadCount: oldFriend.unreadCount + 1);
+      setState(() {});
+    });
+
+    client.socket.on('${widget.id}_read', (userId) {
+      int index = friends.indexWhere((Friend friend) => friend.id == userId);
+      Friend oldFriend = friends[index];
+      friends[index] =
+          friends[index].copyWith(unreadCount: oldFriend.unreadCount - 1);
+      setState(() {});
+    });
   }
 
   void fetchAllFriends() async {
@@ -80,6 +96,8 @@ class _FriendsScreenState extends State<FriendsScreen> {
     client.socket.off('${widget.id}_offline');
     client.socket.off('${widget.id}_friend');
     client.socket.off('${widget.id}_friend_typing');
+    client.socket.off('${widget.id}_read');
+    client.socket.off('${widget.id}_unread');
     super.dispose();
   }
 
@@ -161,6 +179,25 @@ class _FriendsScreenState extends State<FriendsScreen> {
                                       color: Colors.grey,
                                     ),
                                   ),
+                            trailing: friend.unreadCount > 0
+                                ? Container(
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.blue,
+                                    ),
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text(
+                                      friend.unreadCount < 100
+                                          ? friend.unreadCount.toString()
+                                          : "99+",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  )
+                                : null,
                           );
                         },
                       ),

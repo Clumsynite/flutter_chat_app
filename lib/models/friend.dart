@@ -12,6 +12,7 @@ class Friend {
   String? lastSeen;
   final String createdAt;
   final bool isTyping;
+  final int unreadCount;
 
   Friend({
     required this.id,
@@ -24,6 +25,7 @@ class Friend {
     this.lastSeen,
     required this.createdAt,
     required this.isTyping,
+    required this.unreadCount,
   });
 
   Map<String, dynamic> toMap() {
@@ -38,6 +40,7 @@ class Friend {
       'lastSeen': lastSeen,
       'createdAt': createdAt,
       'isTyping': isTyping,
+      'unreadCount': unreadCount,
     };
   }
 
@@ -53,6 +56,7 @@ class Friend {
       lastSeen: map['lastSeen'] != null ? map['lastSeen'] as String : null,
       createdAt: map['createdAt'] as String,
       isTyping: map['isTyping'] ?? false,
+      unreadCount: map['unreadCount'] ?? 0,
     );
   }
 
@@ -72,6 +76,7 @@ class Friend {
     String? lastSeen,
     String? createdAt,
     bool? isTyping,
+    int? unreadCount,
   }) {
     return Friend(
       id: id ?? this.id,
@@ -84,6 +89,7 @@ class Friend {
       lastSeen: lastSeen ?? this.lastSeen,
       createdAt: createdAt ?? this.createdAt,
       isTyping: isTyping ?? this.isTyping,
+      unreadCount: unreadCount ?? this.unreadCount,
     );
   }
 }
