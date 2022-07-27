@@ -77,9 +77,6 @@ class _AuthScreenState extends State<AuthScreen> {
         context: context,
         username: _usernameController.text,
         password: _passwordController.text,
-        onSuccess: (String id) {
-          _buttonController.success();
-        },
         onError: () {
           _buttonController.error();
         },

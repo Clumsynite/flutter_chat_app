@@ -54,7 +54,6 @@ class AuthServices {
     required BuildContext context,
     required String username,
     required String password,
-    required Function onSuccess,
     required VoidCallback onError,
   }) async {
     try {
@@ -83,7 +82,6 @@ class AuthServices {
             (route) => false,
             arguments: jsonDecode(res.body)["_id"],
           );
-          onSuccess();
         },
         onError: onError,
       );
