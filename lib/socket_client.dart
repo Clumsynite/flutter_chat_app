@@ -1,6 +1,4 @@
-import 'package:flutter/painting.dart';
 import 'package:flutter_chat_app/config/env.dart';
-import 'package:flutter_chat_app/config/global_config.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
