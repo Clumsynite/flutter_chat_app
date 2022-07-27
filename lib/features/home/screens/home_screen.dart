@@ -35,6 +35,13 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   void fetchFriendRequestCount() async {
     friendRequestCount =
         await homeServices.getFriendRequestCount(context: context);
