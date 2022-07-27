@@ -53,14 +53,11 @@ class _MessageBoxState extends State<MessageBox> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Tooltip(
-                      message: widget.message.text,
-                      child: Text(
-                        widget.message.text,
-                        maxLines: 8,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
-                      ),
+                    Text(
+                      widget.message.text,
+                      maxLines: 8,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
                     ),
                   ],
                 ),
