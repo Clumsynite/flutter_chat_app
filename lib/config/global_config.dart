@@ -16,6 +16,9 @@ class GlobalConfig {
     stops: [0.5, 1.0],
   );
 
+  static const String socketErrorMsg =
+      "Looks like your account is already active on some other device";
+
   get randomColour =>
       Colors.primaries[Random().nextInt(Colors.primaries.length)];
 }

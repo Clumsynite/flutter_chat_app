@@ -12,6 +12,7 @@ class UserProvider extends ChangeNotifier {
     isOnline: false,
     createdAt: "",
     updatedAt: "",
+    socketId: "",
   );
 
   User get user => _user;

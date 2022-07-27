@@ -15,6 +15,7 @@ class User {
   String? lastSeen;
   final String createdAt;
   final String updatedAt;
+  String? socketId;
 
   User({
     required this.id,
@@ -30,6 +31,7 @@ class User {
     this.lastSeen,
     required this.createdAt,
     required this.updatedAt,
+    this.socketId,
   });
 
   Map<String, dynamic> toMap() {
@@ -47,6 +49,7 @@ class User {
       'lastSeen': lastSeen,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'socketId': socketId,
     };
   }
 
@@ -65,6 +68,7 @@ class User {
       lastSeen: map['lastSeen'] != null ? map['lastSeen'] as String : null,
       createdAt: map['createdAt'] as String,
       updatedAt: map['updatedAt'] as String,
+      socketId: map['socketId'],
     );
   }
 
@@ -87,6 +91,7 @@ class User {
     String? lastSeen,
     String? createdAt,
     String? updatedAt,
+    String? socketId,
   }) {
     return User(
       id: id ?? this.id,
@@ -102,6 +107,7 @@ class User {
       lastSeen: lastSeen ?? this.lastSeen,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      socketId: socketId ?? this.socketId,
     );
   }
 }
