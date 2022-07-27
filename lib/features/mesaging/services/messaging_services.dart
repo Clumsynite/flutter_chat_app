@@ -94,4 +94,28 @@ class MessagingServices {
       showSnackBar(context, e.toString());
     }
   }
+
+  void deleteAllMessages({
+    required BuildContext context,
+    required String friendId,
+  }) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString(tokenKey);
+      http.Response res = await http.delete(
+        Uri.parse('$uri/message/from/$friendId'),
+        headers: <String, String>{
+          'Content-type': "application/json; charset=UTF-8",
+          tokenKey: token!
+        },
+      );
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {},
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
 }

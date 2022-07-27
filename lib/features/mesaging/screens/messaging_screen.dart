@@ -181,6 +181,14 @@ class _MessagingScreenState extends State<MessagingScreen> {
     });
   }
 
+  void onDeleteAll() {
+    messagingServices.deleteAllMessages(context: context, friendId: friend!.id);
+    setState(() {
+      messages = [];
+      selectedMessages = [];
+    });
+  }
+
   void clearSelctedMessages() {
     setState(() {
       selectedMessages = [];
@@ -266,7 +274,28 @@ class _MessagingScreenState extends State<MessagingScreen> {
                   ),
                 ),
           actions: selectedMessages.isEmpty
-              ? null
+              ? [
+                  PopupMenuButton(
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        onTap: onDeleteAll,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                              // size: 16,
+                            ),
+                            Text(
+                              "Clear Chat",
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ]
               : [
                   IconButton(
                     onPressed: deleteSelectedMessages,
