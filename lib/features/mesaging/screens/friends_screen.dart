@@ -45,7 +45,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
     // switch isOnline when friend goes offline
     client.socket.on('${widget.id}_offline', (userId) {
       int index = friends.indexWhere((Friend friend) => friend.id == userId);
-      friends[index] = friends[index].copyWith(isOnline: false);
+      friends[index] = friends[index].copyWith(
+        isOnline: false,
+        lastSeen: DateTime.now().toIso8601String(),
+      );
       setState(() {});
     });
 
