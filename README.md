@@ -29,6 +29,7 @@ samples, guidance on mobile development, and a full API reference.
   ### AUTH
     * sign up
     * sign in
+    * reject login if user is already active on a different client
   ### CONTACTS
     * view contacts
     * send friend request
@@ -48,17 +49,18 @@ samples, guidance on mobile development, and a full API reference.
     * online
     * friend request
     * friend list
+    * user offline if app is closed or user logs out
+  ### PROFILE
+    * update profile details
+    * change password
+
 
 ## TODO FEAUTRES
   
   ### MESSAGES
     * pagination, view messages as you scroll up
     * read status
-
   ### GENERAL
     * notification for unread messages
-    * user offline when app closed, store client socket id in user doc?
-
   ## PROFILE
-    * update profile details
     * update profile picture
