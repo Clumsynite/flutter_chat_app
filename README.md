@@ -63,6 +63,65 @@ Run the flutter app.
 This app was built and tested for **android** so, running it on an emulator or mobile device would be better than web/linux/ios.
 
 
+## Screenshots
+
+### Auth Screen
+
+Sign up and Sign in Sections
+![Auth Screen](/screenshots//auth_screen.png)
+
+### Friends List
+
+This screen shows you a list of friends. Clicking on that Friend opens the messaging screen.
+
+![Friends Screen](/screenshots//friends_screen.png)
+
+### Contatcs
+
+This screen shows you a list of all the people signed up on this app. You have an option to add them to your friend list or remove them from your friend list.
+
+You can only message or view online presence of contacts who are your friends.
+
+![Contacts Screen](/screenshots//contacts_screen.png)
+
+### Profile
+
+This is a basic profile screen.
+
+The first text box shows you the user's full name.
+
+The second text box shows you the user's email address.
+
+You have an option to update these details.
+
+![Profile Screen](/screenshots//profile_screen.png)
+
+### Update Profile Details
+
+After you click Edit Details on profile screen you can see this form enabled, which allows you to update your details.
+
+![Update Profile Details](/screenshots//update_profile_details.png)
+
+### Change Password
+
+There is an option to change password below user details form on Profile Screen.
+
+A new form with password related input fields is visible after you click Change Password.
+
+![Change Password](/screenshots//change_password.png)
+
+
+## Videos
+
+### Friend Request and User Presence
+[Link to Video](/videos//friend_request-and-user_presence.mp4)
+
+
+### Real Time Message
+[Link to Video](/videos//realtime_messaging.mp4)
+
+
+
 ## FEATURES TILL NOW
   ### AUTH
     * sign up
