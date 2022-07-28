@@ -4,11 +4,13 @@ class CustomTextInput extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final int maxLines;
+  final bool enabled;
   const CustomTextInput({
     Key? key,
     required this.hintText,
     required this.controller,
     this.maxLines = 1,
+    this.enabled = true,
   }) : super(key: key);
 
   @override
@@ -16,6 +18,7 @@ class CustomTextInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       maxLines: maxLines,
+      enabled: enabled,
       decoration: InputDecoration(
         hintText: hintText,
         border: const OutlineInputBorder(
