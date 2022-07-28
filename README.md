@@ -113,11 +113,21 @@ A new form with password related input fields is visible after you click Change 
 
 ## Videos
 
+
+
 ### Friend Request and User Presence
+https://user-images.githubusercontent.com/65499068/181581566-77e87cae-63c4-427e-ab45-4ca1ddcfff50.mp4
+
 [Link to Video](/videos//friend_request-and-user_presence.mp4)
 
 
+
 ### Real Time Message
+
+
+https://user-images.githubusercontent.com/65499068/181581634-eec7eb32-36df-4e7d-af0c-ada24e9004fe.mp4
+
+
 [Link to Video](/videos//realtime_messaging.mp4)
 
 
