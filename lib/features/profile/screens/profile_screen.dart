@@ -17,7 +17,9 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final ProfileServices profileServices = ProfileServices();
-  final GlobalKey _formKey = GlobalKey<FormState>();
+
+  // user details form related
+  final _userDetailsFormKey = GlobalKey<FormState>();
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
@@ -26,6 +28,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   bool isFormEditable = false;
   bool isSubmitting = false;
+
+// password form related
+  final _passwordFormKey = GlobalKey<FormState>();
+
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  String? isPasswordError;
+  bool isPasswordFormVisible = false;
+  bool isPasswordChanging = false;
 
   @override
   void initState() {
@@ -50,6 +63,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _firstNameController.dispose();
     _lastNameController.dispose();
     _emailController.dispose();
+    _newPasswordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -79,6 +94,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setFormFields();
     setState(() {
       isSubmitting = false;
+    });
+  }
+
+  void showPasswordChangeForm() {
+    setState(() {
+      isPasswordFormVisible = true;
+    });
+  }
+
+  void onPasswordChangeCancel() {
+    setState(() {
+      isPasswordFormVisible = false;
+      isPasswordError = null;
+    });
+  }
+
+  void onChangePassword() async {
+    setState(() {
+      isPasswordError = null;
+    });
+    if (_passwordFormKey.currentState!.validate() && arePasswordsValid()) {
+      setState(() {
+        isPasswordChanging = true;
+      });
+      await profileServices.changeUserPassword(
+        context: context,
+        newPassword: _newPasswordController.text,
+      );
+      setState(() {
+        isPasswordChanging = false;
+        isPasswordFormVisible = false;
+      });
+    }
+  }
+
+  bool arePasswordsValid() {
+    bool isValid = false;
+    String newPass = _newPasswordController.text;
+    String confirmPass = _confirmPasswordController.text;
+
+    if (newPass == confirmPass) {
+      if (newPass.length < 7) {
+        isValid = false;
+        setState(() {
+          isPasswordError = "Password should be more than 6 characters";
+        });
+      } else {
+        return true;
+      }
+    } else {
+      isValid = false;
+      setState(() {
+        isPasswordError = "Passwords don't match";
+      });
+    }
+    return isValid;
+  }
+
+  void switchPasswordFormVisibility() {
+    setState(() {
+      isPasswordFormVisible = !isPasswordFormVisible;
     });
   }
 
@@ -132,13 +208,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            const SizedBox(width: 20),
             Material(
               elevation: 2,
               child: Container(
                 padding: const EdgeInsets.all(8.0),
                 child: Form(
-                  key: _formKey,
+                  key: _userDetailsFormKey,
                   child: Column(
                     children: [
                       if (_fullNameController.text.isNotEmpty &&
@@ -233,6 +308,102 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 40),
+            InkWell(
+              onTap: switchPasswordFormVisibility,
+              child: ListTile(
+                tileColor:
+                    isPasswordFormVisible ? Colors.blue[50] : Colors.white,
+                title: const Text("Change Password"),
+                trailing: Icon(
+                  isPasswordFormVisible
+                      ? Icons.arrow_upward
+                      : Icons.arrow_downward,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            if (isPasswordFormVisible == true)
+              Container(
+                padding: const EdgeInsets.all(10),
+                color: Colors.blue[50],
+                child: Form(
+                  key: _passwordFormKey,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      CustomTextInput(
+                        hintText: "New Password",
+                        controller: _newPasswordController,
+                      ),
+                      const SizedBox(height: 10),
+                      CustomTextInput(
+                        hintText: "Confirm Password",
+                        controller: _confirmPasswordController,
+                      ),
+                      if (isPasswordError != null)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            isPasswordError.toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 20),
+                      isPasswordChanging
+                          ? SizedBox(
+                              height: 50,
+                              child: Loader(
+                                color: Colors.blue.shade50,
+                              ),
+                            )
+                          : Row(
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: ElevatedButton.icon(
+                                      onPressed: onPasswordChangeCancel,
+                                      icon: const Icon(Icons.cancel),
+                                      label: const Text("Cancel"),
+                                      style: ButtonStyle(
+                                        elevation: MaterialStateProperty.all(1),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                          Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: ElevatedButton.icon(
+                                      onPressed: onChangePassword,
+                                      icon: const Icon(Icons.save),
+                                      label: const Text("Change Password"),
+                                      style: ButtonStyle(
+                                        elevation: MaterialStateProperty.all(1),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                          Colors.blue.shade900,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),

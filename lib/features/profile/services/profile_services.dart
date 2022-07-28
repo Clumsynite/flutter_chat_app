@@ -64,4 +64,60 @@ class ProfileServices {
       showSnackBar(context, e.toString());
     }
   }
+
+  Future<void> changeUserPassword({
+    required BuildContext context,
+    required String newPassword,
+  }) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString(tokenKey);
+      if (token == null) {
+        prefs.setString(tokenKey, "");
+      }
+      http.Response res = await http.get(
+        Uri.parse('$uri/api/is-token-valid'),
+        headers: <String, String>{
+          'Content-type': "application/json; charset=UTF-8",
+          tokenKey: token!
+        },
+      );
+      var response = jsonDecode(res.body);
+      if (response == true) {
+        http.Response userRes = await http.put(
+          Uri.parse('$uri/user/password'),
+          headers: <String, String>{
+            'Content-type': "application/json; charset=UTF-8",
+            'x-auth-token': token
+          },
+          body: jsonEncode(
+            {
+              'newPassword': newPassword,
+            },
+          ),
+        );
+        httpErrorHandle(
+          response: userRes,
+          context: context,
+          onSuccess: () async {
+            Provider.of<UserProvider>(
+              context,
+              listen: false,
+            ).setUser(userRes.body);
+            await prefs.setString(
+              socketIdKey,
+              jsonDecode(userRes.body)['socketId'],
+            );
+            await prefs.setString(tokenKey, jsonDecode(userRes.body)['token']);
+            showSnackBar(
+              context,
+              "Password updated Successfully!\nPlease use your new password to signin later.",
+            );
+          },
+        );
+      }
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
 }
