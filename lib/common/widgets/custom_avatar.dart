@@ -21,7 +21,7 @@ class CustomAvatar extends StatelessWidget {
       radius: radius,
       backgroundColor: GlobalConfig().randomColour,
       child: Text(
-        username.toUpperCase(),
+        username[0].toUpperCase(),
         style: TextStyle(
           fontSize: fontSize,
           color: Colors.white,
