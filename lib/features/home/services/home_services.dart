@@ -15,14 +15,16 @@ class HomeServices {
   void logout({
     required BuildContext context,
     required Function onSuccess,
+    required bool byUser,
   }) async {
     try {
       User user = Provider.of<UserProvider>(context, listen: false).user;
-      onSuccess(user.id);
+      if (byUser) onSuccess(user.id);
 
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       await sharedPreferences.setString(tokenKey, '');
+      await sharedPreferences.setString(socketIdKey, '');
       // ignore: use_build_context_synchronously
       Navigator.pushNamedAndRemoveUntil(
         context,

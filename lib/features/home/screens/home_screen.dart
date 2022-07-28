@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/config/global_config.dart';
+import 'package:flutter_chat_app/constants/utils.dart';
 import 'package:flutter_chat_app/features/contacts/screens/contacts_screen.dart';
 import 'package:flutter_chat_app/features/friend_requests/screens/friend_requests_screen.dart';
 import 'package:flutter_chat_app/features/home/services/home_services.dart';
@@ -62,23 +63,35 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void listenToForceLogout() {
+    client.socket.on('${widget.id}_logout', (data) {
+      if (mounted) {
+        showSnackBar(context, "Force logged out by another device!");
+        onLogout(false);
+      }
+    });
+  }
+
   @override
   void initState() {
     fetchFriendRequestCount();
     super.initState();
     client.notifyUserOnline(widget.id);
+    listenToForceLogout();
   }
 
   @override
   void dispose() {
     client.socket.off('${widget.id}_friend');
+    // client.socket.off('${widget.id}_logout');
     super.dispose();
   }
 
-  void onLogout() {
+  void onLogout(bool byUser) {
     HomeServices().logout(
       context: context,
       onSuccess: client.notifyUserOffline,
+      byUser: byUser,
     );
   }
 
@@ -119,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
             PopupMenuButton(
               itemBuilder: (context) => [
                 PopupMenuItem(
-                  onTap: onLogout,
+                  onTap: () => onLogout(true),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [

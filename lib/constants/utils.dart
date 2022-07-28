@@ -13,6 +13,29 @@ void showSnackBar(BuildContext context, String text) {
   );
 }
 
+void showSnackBarWithAction(
+  BuildContext context,
+  String message,
+  String label,
+  VoidCallback onAction,
+) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      action: SnackBarAction(
+        label: label,
+        onPressed: onAction,
+      ),
+      content: Text(message),
+      duration: const Duration(milliseconds: 10000),
+      // width: 280.0, // Width of the SnackBar.
+      // padding: const EdgeInsets.symmetric(
+      //   horizontal: 8.0, // Inner padding for SnackBar content.
+      // ),
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
+}
+
 Future<List<File>> pickImages() async {
   List<File> images = [];
   try {

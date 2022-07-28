@@ -28,6 +28,13 @@ class _FriendsScreenState extends State<FriendsScreen> {
   bool isLoading = false;
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     fetchAllFriends();

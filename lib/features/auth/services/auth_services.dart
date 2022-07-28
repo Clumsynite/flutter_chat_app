@@ -9,6 +9,7 @@ import 'package:flutter_chat_app/constants/error_handling.dart';
 import 'package:flutter_chat_app/constants/utils.dart';
 import 'package:flutter_chat_app/features/home/screens/home_screen.dart';
 import 'package:flutter_chat_app/provider/user_provider.dart';
+import 'package:flutter_chat_app/socket_client.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,36 +72,49 @@ class AuthServices {
         ),
       );
       httpErrorHandle(
-        response: res,
-        context: context,
-        onSuccess: () async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString(tokenKey, jsonDecode(res.body)['token']);
+          response: res,
+          context: context,
+          onSuccess: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setString(tokenKey, jsonDecode(res.body)['token']);
 
-          String? socketId = prefs.getString(socketIdKey);
+            String? socketId = prefs.getString(socketIdKey);
 
-          bool isUserAlreadyActive = verifySocketId(
-            socketId: socketId,
-            userSocketId: jsonDecode(res.body)['socketId'],
-          );
-          if (!isUserAlreadyActive) {
-            Provider.of<UserProvider>(context, listen: false).setUser(res.body);
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              HomeScreen.routeName,
-              (route) => false,
-              arguments: jsonDecode(res.body)["_id"],
+            bool isUserAlreadyActive = verifySocketId(
+              socketId: socketId,
+              userSocketId: jsonDecode(res.body)['socketId'],
+              isSignin: true,
             );
-            await prefs.setString(
-                socketIdKey, jsonDecode(res.body)['socketId'] ?? "");
-          } else {
-            onError();
-            showSnackBar(context, GlobalConfig.socketErrorMsg);
-            await prefs.setString(tokenKey, '');
-          }
-        },
-        onError: onError,
-      );
+            if (!isUserAlreadyActive) {
+              Provider.of<UserProvider>(context, listen: false)
+                  .setUser(res.body);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                HomeScreen.routeName,
+                (route) => false,
+                arguments: jsonDecode(res.body)["_id"],
+              );
+              await prefs.setString(
+                  socketIdKey, jsonDecode(res.body)['socketId'] ?? "");
+            } else {
+              onError();
+              showSnackBar(context, GlobalConfig.socketErrorMsg);
+              await prefs.setString(tokenKey, '');
+            }
+          },
+          onError: onError,
+          onSocketError: () {
+            SocketClient client = SocketClient();
+            showSnackBarWithAction(
+              context,
+              GlobalConfig.socketErrorMsg,
+              "Force Logout",
+              () {
+                client.notifyUserOffline(jsonDecode(res.body)["_id"]);
+                showSnackBar(context, "Try Login to now!");
+              },
+            );
+          });
     } catch (e) {
       onError();
       showSnackBar(context, e.toString());
@@ -137,6 +151,7 @@ class AuthServices {
         bool isUserAlreadyActive = verifySocketId(
           socketId: socketId,
           userSocketId: jsonDecode(userRes.body)['socketId'],
+          isSignin: false,
         );
         if (!isUserAlreadyActive) {
           Provider.of<UserProvider>(
@@ -158,6 +173,7 @@ class AuthServices {
   bool verifySocketId({
     required String? socketId,
     required String? userSocketId,
+    required bool isSignin,
   }) {
     bool isUserAlreadyActive = true;
     if (socketId == null) {
@@ -166,7 +182,8 @@ class AuthServices {
       isUserAlreadyActive = true;
       // await prefs.setString(tokenKey, '');
     } else {
-      if (userSocketId != null) {
+      if (userSocketId != null && isSignin) {
+        isUserAlreadyActive = true;
         // await prefs.setString(socketIdKey, userSocketId);
       }
       isUserAlreadyActive = false;

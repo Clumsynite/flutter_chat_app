@@ -9,6 +9,7 @@ void httpErrorHandle({
   required BuildContext context,
   required VoidCallback onSuccess,
   VoidCallback? onError,
+  VoidCallback? onSocketError,
 }) {
   switch (response.statusCode) {
     case 200:
@@ -20,7 +21,12 @@ void httpErrorHandle({
       break;
     case 500:
       if (onError != null) onError();
-      showSnackBar(context, jsonDecode(response.body)['error']);
+      if (json.decode(response.body)['code'] == "ALREADY_ACTIVE" &&
+          onSocketError != null) {
+        onSocketError();
+      } else {
+        showSnackBar(context, jsonDecode(response.body)['error']);
+      }
       break;
     default:
       showSnackBar(context, response.body);
