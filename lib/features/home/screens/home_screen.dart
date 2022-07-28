@@ -6,6 +6,7 @@ import 'package:flutter_chat_app/features/contacts/screens/contacts_screen.dart'
 import 'package:flutter_chat_app/features/friend_requests/screens/friend_requests_screen.dart';
 import 'package:flutter_chat_app/features/home/services/home_services.dart';
 import 'package:flutter_chat_app/features/mesaging/screens/friends_screen.dart';
+import 'package:flutter_chat_app/features/profile/screens/profile_screen.dart';
 import 'package:flutter_chat_app/socket_client.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,9 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return [
       FriendsScreen(id: id),
       const ContactsScreen(),
-      const Center(
-        child: Text("Tab 3"),
-      ),
+      const ProfileScreen(),
     ];
   }
 
