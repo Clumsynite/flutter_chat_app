@@ -34,7 +34,7 @@ class CustomTextInput extends StatelessWidget {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please $hintText';
+          return 'Please enter $hintText';
         }
         return null;
       },
