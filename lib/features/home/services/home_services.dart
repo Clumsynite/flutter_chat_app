@@ -19,7 +19,7 @@ class HomeServices {
   }) async {
     try {
       User user = Provider.of<UserProvider>(context, listen: false).user;
-      if (byUser) onSuccess(user.id);
+      if (byUser) onSuccess(user.id, !byUser);
 
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();

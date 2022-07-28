@@ -26,8 +26,11 @@ class SocketClient {
     socket.emit("client_online", id);
   }
 
-  void notifyUserOffline(String id) {
-    socket.emit("client_offline", id);
+  void notifyUserOffline(String id, bool? isForced) {
+    socket.emit("client_offline", {
+      'id': id,
+      "isForced": isForced,
+    });
   }
 
   void notifyUserTyping({

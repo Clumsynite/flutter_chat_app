@@ -110,7 +110,7 @@ class AuthServices {
               GlobalConfig.socketErrorMsg,
               "Force Logout",
               () {
-                client.notifyUserOffline(jsonDecode(res.body)["_id"]);
+                client.notifyUserOffline(jsonDecode(res.body)["_id"], true);
                 showSnackBar(context, "Try Login to now!");
               },
             );
